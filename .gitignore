@@ -1,1 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
+.gitignore
+
+.idea
+.idea/*
+/node_modules
+
+yarn.lock
