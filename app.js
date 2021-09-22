@@ -1,6 +1,11 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const app = express()
 const port = 3000
+const connect = require('./src/services')
+
+// main().catch(err => console.log(err))
+
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
