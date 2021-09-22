@@ -1,11 +1,4 @@
-const mongoose = require(mongoose)
-const staff = require('./staff')
-
-(async () => {
-    // database connection
-    await mongoose.connect('mongodb://localhost:27017/test')
-})()
-
+const employee = require('./staff')
 module.exports = {
-    staff
+    employee
 }

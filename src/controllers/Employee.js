@@ -1,21 +1,27 @@
-const {Staff}  = require('../services')
+const {employee}  = require('../services')
 
 
 class Employee {
 
-    create(req, res) {
+    async create(req, res) {
 
-        const staff = new Staff({
+        const check = await employee.create({
             'first_name': 'Olumuyiwa',
             'last_name': 'Akinyemi',
             'email': 'olumuyiwa@initsng.com'
         })
-       const check = await staff.save()
         console.log(check);
 
         res.send('Hello World!')
     }
     update(req, res) {
+        res.send('Hello World! update')
+    }
+
+    async list(req, res) {
+        const check = await employee.list();
+        console.log(check);
+
         res.send('Hello World! update')
     }
 

@@ -1,9 +1,8 @@
-const mongoose = require('mongoose')
+const {Employee} = require('../models')
 
-const StaffSchema = new mongoose.Schema({
-    'first_name' : String,
-    'last_name' : String,
-    'email' : String
-})
+// const instanceEmployee = new Employee();
 
-module.exports =  mongoose.model('staff', StaffSchema);
+const create = async data => new Employee(data).save()
+const list = async () => new Employee().find().all('staff')
+
+module.exports = {create, list}

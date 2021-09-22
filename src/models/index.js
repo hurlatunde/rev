@@ -1,12 +1,11 @@
 const mongoose = require('mongoose')
-const Staff = require('./staff')
+const Employee = require('./staff')
 
 const connectDb = () => {
-    return mongoose.connect(process.env.DATABASE_URL);
+    return mongoose.connect('mongodb://localhost:27017/rev');
+
 };
 
-const models = { Staff };
-
-export { connectDb };
-
-export default models;
+module.exports = {
+    Employee, connectDb
+}
