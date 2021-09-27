@@ -20,7 +20,7 @@ class Employee {
         const check = await employee.update({'email': 'olumuyiwa@initsng.com'},
                {$set: {'first_name': "Ayomide"}}
         )
-        console.log(check.find())
+        console.log(check)
         res.send(check)
     }
 

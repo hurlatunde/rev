@@ -14,6 +14,6 @@ app.use('/api/employees', require('./src/routes/employees'));
 
 connectDb().then(async () => {
     app.listen(port, () => {
-        console.log(`Example app listening at http://localhost:${port}`)
+        console.log(`app is listening at http://localhost:${port}`)
     })
 });
