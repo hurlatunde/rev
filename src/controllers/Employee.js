@@ -1,7 +1,7 @@
 //const employee = require('../models/employee');
 const {response} = require("../services");
-const {employee}  = require('../services')
-const {isEmpty, remove, unset, filter} = require('lodash')
+const {employee} = require('../services')
+const {isEmpty, remove, unset, filter,omit} = require('lodash')
 const passwordHash = require('password-hash')
 const bcrypt = require('bcryptjs')
 
@@ -11,10 +11,10 @@ class Employee {
         const body = req.body
 
         if (isEmpty(body)) {
-           return response.sendError(req, res, {error: "Request is empty", status : 500})
-        }s
+            return response.sendError(req, res, {error: "Request is empty", status: 500})
+        }
 
-        try{
+        try {
             let data = {
                 'first_name': body.first_name,
                 'last_name': body.last_name,
@@ -23,13 +23,13 @@ class Employee {
             }
 
             const check = await employee.create(data)
-            if(isEmpty(check._id)) {
+            if (isEmpty(check._id)) {
                 return response.sendSuccess(req, res, {message: "Employee created successfully", data: check});
             } else {
                 return response.sendError(req, res);
             }
-        }catch(e){
-            response.sendError(req, res, { error: e, status: 500 })
+        } catch (e) {
+            response.sendError(req, res, {error: e, status: 500})
         }
     }
 
@@ -37,18 +37,18 @@ class Employee {
         const body = req.body
 
         if (isEmpty(body)) {
-           return response.sendError(req, res, {error: "Request is empty", status : 500})
+            return response.sendError(req, res, {error: "Request is empty", status: 500})
         }
 
-        try{
+        try {
             const check = await employee.update(body)
-            if(isEmpty(check._id)) {
+            if (isEmpty(check._id)) {
                 return response.sendSuccess(req, res, {message: "Employee updated successfully", data: check});
             } else {
                 return response.sendError(req, res);
             }
-        }catch(e){
-            response.sendError(req, res, { error: e, status: 500 })
+        } catch (e) {
+            response.sendError(req, res, {error: e, status: 500})
         }
     }
 
@@ -57,11 +57,11 @@ class Employee {
             const data = await employee.list();
             return response.sendSuccess(req, res, {message: 'Employee successfully called', data});
         } catch (e) {
-            response.sendError(req, res, { error: e, status: 500 })
+            response.sendError(req, res, {error: e, status: 500})
         }
     }
 
-    async show(req, res){
+    async show(req, res) {
         try {
             const data = await employee.show(req.params.id);
 
@@ -69,55 +69,39 @@ class Employee {
 
             // return response.sendSuccess(req, res, {message: 'Employee successfully called', data});
         } catch (e) {
-            response.sendError(req, res, { error: e, status: 500 })
+            response.sendError(req, res, {error: e, status: 500})
         }
 
         const check = await employee.show({
-            "email" : "olumuyiwa@initsng.com"
+            "email": "olumuyiwa@initsng.com"
         })
         res.send(check)
     }
 
-    async login(req, res){
+    async login(req, res) {
         const body = req.body
 
         if (isEmpty(body.email)) {
-            return response.sendError(req, res, {error: "Email is required", status : 500})
+            return response.sendError(req, res, {error: "Email is required", status: 500})
         }
 
         if (isEmpty(body.password)) {
-            return response.sendError(req, res, {error: "Password is required", status : 500})
+            return response.sendError(req, res, {error: "Password is required", status: 500})
         }
 
-        try{ 
-
-            const data = await employee.checkEmmployeeEmai(body.email);
-            console.log(data)
-
-            if(bcrypt.compareSync(body.password, data.password)) {
-                // let filtered = {}
-                // Object.keys(data).filter(prop => {
-                //     if (prop !== 'second') {
-                //         filtered[prop] = data[prop]
-                //     }
-                // })
-                // console.log(filtered)
-
-                const dataWithOutPassword = data.forEach((element, index) => {
-                    console.log(index);
-                });
-
-                return response.sendSuccess(req, res, {message: 'Employee returned', data: data});
+        try {
+            let data = await employee.checkEmployeeEmail(body.email)
+            if (bcrypt.compareSync(body.password, data.password)) {
+                return response.sendSuccess(req, res, {message: 'Employee returned', data});
+            } else {
+                return response.sendError(req, res, {error: 'Wrong email/ password combination'});
             }
-
-            return response.sendError(req, res, {error: 'Wrong email/ password combination', data: data});
-            
-        }catch(e){
+        } catch (e) {
             response.sendError(req, res, {error: e, status: 500})
         }
     }
 
-    async remove(values){
+    async remove(values) {
         let arr = []
         values.forEach((element, index) => {
             console.log(element)
