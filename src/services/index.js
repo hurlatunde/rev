@@ -1,4 +1,7 @@
-const employee = require('./staff')
+const employee = require('./employee')
+const response = require('./response');
+const team = require('./team')
+
 module.exports = {
-    employee
+    employee, response, team
 }

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const Employee = require('./staff')
+const Employee = require('./employee')
+const Team = require('./team')
 
 const connectDb = () => {
     return mongoose.connect('mongodb://localhost:27017/rev');
@@ -7,5 +8,5 @@ const connectDb = () => {
 };
 
 module.exports = {
-    Employee, connectDb
+    Employee, Team, connectDb
 }
