@@ -1,7 +1,7 @@
 //const employee = require('../models/employee');
 const {response} = require("../services");
 const {employee}  = require('../services')
-const {isEmpty, remove, omit, filter} = require('lodash')
+const {isEmpty, remove, unset, filter} = require('lodash')
 const passwordHash = require('password-hash')
 const bcrypt = require('bcryptjs')
 
@@ -92,11 +92,21 @@ class Employee {
         try{ 
 
             const data = await employee.checkEmmployeeEmai(body.email);
+            console.log(data)
 
             if(bcrypt.compareSync(body.password, data.password)) {
-                console.log(this)
-                // Employee.remove(data)
-                // console.log(data)
+                // let filtered = {}
+                // Object.keys(data).filter(prop => {
+                //     if (prop !== 'second') {
+                //         filtered[prop] = data[prop]
+                //     }
+                // })
+                // console.log(filtered)
+
+                const dataWithOutPassword = data.forEach((element, index) => {
+                    console.log(index);
+                });
+
                 return response.sendSuccess(req, res, {message: 'Employee returned', data: data});
             }
 
