@@ -16,7 +16,7 @@ class Employee {
             return response.sendError(req, res, {"message": message, status : 500})
         }
 
-        try{
+        try {
             let data = {
                 'first_name': body.first_name,
                 'last_name': body.last_name,
@@ -25,13 +25,13 @@ class Employee {
             }
 
             const check = await employee.create(data)
-            if(isEmpty(check._id)) {
+            if (isEmpty(check._id)) {
                 return response.sendSuccess(req, res, {message: "Employee created successfully", data: check});
             } else {
                 return response.sendError(req, res);
             }
-        }catch(e){
-            response.sendError(req, res, { error: e, status: 500 })
+        } catch (e) {
+            response.sendError(req, res, {error: e, status: 500})
         }
     }
 
@@ -39,18 +39,18 @@ class Employee {
         const body = req.body
 
         if (isEmpty(body)) {
-           return response.sendError(req, res, {error: "Request is empty", status : 500})
+            return response.sendError(req, res, {error: "Request is empty", status: 500})
         }
 
-        try{
+        try {
             const check = await employee.update(body)
-            if(isEmpty(check._id)) {
+            if (isEmpty(check._id)) {
                 return response.sendSuccess(req, res, {message: "Employee updated successfully", data: check});
             } else {
                 return response.sendError(req, res);
             }
-        }catch(e){
-            response.sendError(req, res, { error: e, status: 500 })
+        } catch (e) {
+            response.sendError(req, res, {error: e, status: 500})
         }
     }
 
@@ -59,11 +59,11 @@ class Employee {
             const data = await employee.list();
             return response.sendSuccess(req, res, {message: 'Employee successfully called', data});
         } catch (e) {
-            response.sendError(req, res, { error: e, status: 500 })
+            response.sendError(req, res, {error: e, status: 500})
         }
     }
 
-    async show(req, res){
+    async show(req, res) {
         try {
             const data = await employee.show(req.params.id);
 
@@ -71,16 +71,16 @@ class Employee {
 
             // return response.sendSuccess(req, res, {message: 'Employee successfully called', data});
         } catch (e) {
-            response.sendError(req, res, { error: e, status: 500 })
+            response.sendError(req, res, {error: e, status: 500})
         }
 
         const check = await employee.show({
-            "email" : "olumuyiwa@initsng.com"
+            "email": "olumuyiwa@initsng.com"
         })
         res.send(check)
     }
 
-    async login(req, res){
+    async login(req, res) {
         const body = req.body
 
         // if (isEmpty(body.email)) {
@@ -114,15 +114,12 @@ class Employee {
 
                 return response.sendSuccess(req, res, {message: 'Employee returned', data: data});
             }
-
-            return response.sendError(req, res, {error: 'Wrong email/ password combination', data: data});
-            
-        }catch(e){
+        } catch (e) {
             response.sendError(req, res, {error: e, status: 500})
         }
     }
 
-    async remove(values){
+    async remove(values) {
         let arr = []
         values.forEach((element, index) => {
             console.log(element)

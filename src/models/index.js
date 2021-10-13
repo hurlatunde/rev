@@ -4,7 +4,6 @@ const Team = require('./team')
 
 const connectDb = () => {
     return mongoose.connect('mongodb://localhost:27017/rev');
-
 };
 
 module.exports = {
