@@ -2,16 +2,16 @@
 const {response} = require("../services");
 const {team}  = require('../services')
 const {isEmpty} = require('lodash')
+const {teamValidate} = require('../utilites/validation')
 
 class Team {
 
     async create(req, res) {
         const body = req.body
-        //if body is empty
-        //validate
-
-        if (isEmpty(body)) {
-           return response.sendError(req, res, {error: "Request is empty", status : 500})
+       
+        const { error, value, message } = await teamValidate.create(body)
+        if(error){
+            return response.sendError(req, res, {"message": message, status : 500})
         }
 
         try{
@@ -29,8 +29,9 @@ class Team {
     async update(req, res) {
         const body = req.body
 
-        if (isEmpty(body)) {
-           return response.sendError(req, res, {error: "Request is empty", status : 500})
+        const { error, value, message } = await teamValidate.edit(body)
+        if(error){
+            return response.sendError(req, res, {"message": message, status : 500})
         }
 
         try{

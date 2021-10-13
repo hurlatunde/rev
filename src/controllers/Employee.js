@@ -1,6 +1,7 @@
 //const employee = require('../models/employee');
 const {response} = require("../services");
 const {employee}  = require('../services')
+const {employeeValidate} = require('../utilites/validation')
 const {isEmpty, remove, unset, filter} = require('lodash')
 const passwordHash = require('password-hash')
 const bcrypt = require('bcryptjs')
@@ -10,9 +11,10 @@ class Employee {
     async create(req, res) {
         const body = req.body
 
-        if (isEmpty(body)) {
-           return response.sendError(req, res, {error: "Request is empty", status : 500})
-        }s
+        const { error, value, message } = await employeeValidate.create(body)
+        if(error){
+            return response.sendError(req, res, {"message": message, status : 500})
+        }
 
         try{
             let data = {
@@ -81,12 +83,17 @@ class Employee {
     async login(req, res){
         const body = req.body
 
-        if (isEmpty(body.email)) {
-            return response.sendError(req, res, {error: "Email is required", status : 500})
-        }
+        // if (isEmpty(body.email)) {
+        //     return response.sendError(req, res, {error: "Email is required", status : 500})
+        // }
 
-        if (isEmpty(body.password)) {
-            return response.sendError(req, res, {error: "Password is required", status : 500})
+        // if (isEmpty(body.password)) {
+        //     return response.sendError(req, res, {error: "Password is required", status : 500})
+        // }
+
+        const { error, value, message } = await employeeValidate.login(body)
+        if(error){
+            return response.sendError(req, res, {"message": message, status : 500})
         }
 
         try{ 
@@ -103,9 +110,7 @@ class Employee {
                 // })
                 // console.log(filtered)
 
-                const dataWithOutPassword = data.forEach((element, index) => {
-                    console.log(index);
-                });
+        
 
                 return response.sendSuccess(req, res, {message: 'Employee returned', data: data});
             }
