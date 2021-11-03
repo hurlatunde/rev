@@ -1,10 +1,12 @@
-//const employee = require('../models/employee');
+const jwt = require('jsonwebtoken')
 const {response} = require("../services");
 const {employee}  = require('../services')
 const {employeeValidate} = require('../utilites/validation')
 const {isEmpty, remove, unset, filter} = require('lodash')
 const passwordHash = require('password-hash')
 const bcrypt = require('bcryptjs')
+// const config = require(__dirname, "../../config.json")
+const {port,tokenLife, refreshTokenLife, refreshTokenSecret} = require('../../config.json')
 
 class Employee {
 
@@ -25,8 +27,16 @@ class Employee {
             }
 
             const check = await employee.create(data)
-            if (isEmpty(check._id)) {
-                return response.sendSuccess(req, res, {message: "Employee created successfully", data: check});
+            if (check) { 
+                let employee = {}
+                employee.first_name = data.first_name,
+                employee.last_name = data.last_name
+                employee.email = data.email
+
+                let token =  jwt.sign(employee, refreshTokenSecret, {expiresIn: refreshTokenLife});
+                return response.sendSuccess(req, res, {message: 'Employee returned', data:{employee:employee, token :token } });
+
+                // return response.sendSuccess(req, res, {message: "Employee created successfully", data: check});
             } else {
                 return response.sendError(req, res);
             }
@@ -80,16 +90,14 @@ class Employee {
         res.send(check)
     }
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     * @returns 
+     */
     async login(req, res) {
         const body = req.body
-
-        // if (isEmpty(body.email)) {
-        //     return response.sendError(req, res, {error: "Email is required", status : 500})
-        // }
-
-        // if (isEmpty(body.password)) {
-        //     return response.sendError(req, res, {error: "Password is required", status : 500})
-        // }
 
         const { error, value, message } = await employeeValidate.login(body)
         if(error){
@@ -97,22 +105,18 @@ class Employee {
         }
 
         try{ 
-
-            const data = await employee.checkEmmployeeEmai(body.email);
-            console.log(data)
+            const data = await employee.checkEmployeeEmail(body.email);
 
             if(bcrypt.compareSync(body.password, data.password)) {
-                // let filtered = {}
-                // Object.keys(data).filter(prop => {
-                //     if (prop !== 'second') {
-                //         filtered[prop] = data[prop]
-                //     }
-                // })
-                // console.log(filtered)
 
-        
+                let employee = {}
+                employee.first_name = data.first_name,
+                employee.last_name = data.last_name
+                employee.email = data.email
 
-                return response.sendSuccess(req, res, {message: 'Employee returned', data: data});
+                let token =  jwt.sign(employee, refreshTokenSecret, {expiresIn: refreshTokenLife});
+                // let token =  jwt.sign({...data}, refreshTokenSecret, {expiresIn: refreshTokenLife});
+                return response.sendSuccess(req, res, {message: 'Employee returned', data:{employee:employee, token :token } });
             }
         } catch (e) {
             response.sendError(req, res, {error: e, status: 500})

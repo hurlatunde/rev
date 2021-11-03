@@ -1,0 +1,7 @@
+{
+    "secret": "wtmg",
+    "refreshTokenSecret": "wtmg-refresh",
+    "port": 3000,
+    "tokenLife": 900,
+    "refreshTokenLife": 86400
+}

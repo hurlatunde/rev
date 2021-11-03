@@ -2,7 +2,6 @@ const express = require('express')
 const mongoose = require('mongoose')
 var bodyParser = require('body-parser')
 
-
 const app = express()
 const port = 3000
 // const connect = require('./src/services')
